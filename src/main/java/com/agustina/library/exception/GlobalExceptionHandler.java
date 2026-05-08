@@ -70,4 +70,14 @@ public class GlobalExceptionHandler {
                 "error", ex.getMessage()
         );
     }
+
+    @ExceptionHandler(InvalidUserNameException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Map<String, Object> handleInvalidUserName(InvalidUserNameException ex){
+        return Map.of(
+                "timestamp", LocalDateTime.now(),
+                "status", 400,
+                "error", ex.getMessage()
+        );
+    }
 }

@@ -1,12 +1,7 @@
 package com.agustina.library.service;
 
 import com.agustina.library.dto.CreateLoanRequest;
-import com.agustina.library.exception.BookNotFoundException;
-import com.agustina.library.exception.InvalidReturnDateException;
-import com.agustina.library.exception.DuplicateActiveLoanException;
-import com.agustina.library.exception.LoanAlreadyReturnedException;
-import com.agustina.library.exception.LoanNotFoundException;
-import com.agustina.library.exception.NoAvailableCopiesException;
+import com.agustina.library.exception.*;
 import com.agustina.library.model.Book;
 import com.agustina.library.model.Loan;
 import com.agustina.library.repository.BookRepository;
@@ -31,6 +26,10 @@ public class LoanService {
     // Method to create a loan
     public Loan createLoan(CreateLoanRequest request){
         Book book = bookRepository.findById(request.bookId()).orElseThrow(() -> new BookNotFoundException("Book not found."));
+
+        if(request.userName() == null || request.userName().isBlank()){
+            throw new InvalidUserNameException("User name cannot be empty.");
+        }
 
         boolean userAlreadyHasBook = loanRepository.existsByUserNameAndBookIdAndActualReturnDateIsNull(request.userName(), request.bookId());
 

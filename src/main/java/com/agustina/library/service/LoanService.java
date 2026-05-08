@@ -25,6 +25,10 @@ public class LoanService {
     public Loan createLoan(CreateLoanRequest request){
         Book book = bookRepository.findById(request.bookId()).orElseThrow();
 
+        if (book.getAvailableCopies() <= 0){
+            throw new RuntimeException("No copies available for this book.");
+        }
+
         book.setAvailableCopies(book.getAvailableCopies() - 1);
 
         Loan loan = new Loan (null, request.userName(), request.expectedReturnDate(), null, book); // actualReturnDate is null until the loan is returned

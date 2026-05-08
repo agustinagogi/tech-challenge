@@ -58,5 +58,72 @@ function App() {
     }
   }
 
+return (
+    <main style={{ padding: "20px" }}>
+
+      <h1>Library Search</h1>
+
+      <input
+        type="text"
+        placeholder="Search book by title"
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+      />
+
+      <button onClick={searchBooks}>
+        Search
+      </button>
+
+      <h2>Borrow a book</h2>
+
+      <label>User name</label>
+      <br />
+
+      <input
+        type="text"
+        placeholder="User name"
+        value={userName}
+        onChange={(e) => setUserName(e.target.value)}
+      />
+
+      <br /><br />
+
+      <label>Expected return date</label>
+      <br />
+
+      <input
+        type="date"
+        value={expectedReturnDate}
+        onChange={(e) =>
+          setExpectedReturnDate(e.target.value)
+        }
+      />
+
+      <ul>
+        {books.map((book) => (
+          <li key={book.id}>
+            {book.title}
+            {" - "}
+            Copies available:
+            {" "}
+            {book.availableCopies}
+
+            <button
+              disabled={book.availableCopies <= 0}
+              onClick={() => borrowBook(book.id)}
+              style={{ marginLeft: "10px" }}
+            >
+              Borrow
+            </button>
+          </li>
+        ))}
+      </ul>
+
+      <p>{message}</p>
+
+    </main>
+  );
 }
+
+export default App;
 

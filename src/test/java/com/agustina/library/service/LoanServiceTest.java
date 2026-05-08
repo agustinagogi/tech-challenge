@@ -2,6 +2,7 @@ package com.agustina.library.service;
 
 
 import com.agustina.library.dto.CreateLoanRequest;
+import com.agustina.library.exception.NoAvailableCopiesException;
 import com.agustina.library.model.Book;
 import com.agustina.library.model.Loan;
 import com.agustina.library.repository.BookRepository;
@@ -13,9 +14,9 @@ import java.time.LocalDate;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 class LoanServiceTest {
 
@@ -53,4 +54,34 @@ class LoanServiceTest {
         verify(bookRepository).findById(1L);
         verify(loanRepository).save(any(Loan.class));
     }
+
+    @Test
+    void shouldThrowWhenNoCopiesAvailable() {
+
+        Book book = new Book(
+                1L,
+                "Clean Code",
+                "9780132350884",
+                0
+        );
+
+        CreateLoanRequest request = new CreateLoanRequest(
+                1L,
+                "Agustina",
+                LocalDate.now().plusDays(14)
+        );
+
+        when(bookRepository.findById(1L))
+                .thenReturn(Optional.of(book));
+
+        assertThrows(NoAvailableCopiesException.class, () ->
+                loanService.createLoan(request)
+        );
+
+        assertEquals(0, book.getAvailableCopies());
+
+        verify(loanRepository, never()).save(any(Loan.class));
+    }
+
+
 }

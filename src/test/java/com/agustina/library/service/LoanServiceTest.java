@@ -161,7 +161,7 @@ class LoanServiceTest {
     void shouldThrowWhenUserNameIsEmpty(){
         Book book = new Book(1L, "Prueba", "9780132350884", 2);
 
-        CreateLoanRequest request = new CreateLoanRequest(1L, "Agustina", LocalDate.now().plusDays(14));
+        CreateLoanRequest request = new CreateLoanRequest(1L, "", LocalDate.now().plusDays(14));
 
         when(bookRepository.findById(1L)).thenReturn(Optional.of(book));
 

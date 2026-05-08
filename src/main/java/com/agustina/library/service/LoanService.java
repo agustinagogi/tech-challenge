@@ -31,12 +31,14 @@ public class LoanService {
             throw new InvalidUserNameException("User name cannot be empty.");
         }
 
+        // Prevent users from borrowing the same book twice simultaneously
         boolean userAlreadyHasBook = loanRepository.existsByUserNameAndBookIdAndActualReturnDateIsNull(request.userName(), request.bookId());
 
         if (userAlreadyHasBook){
             throw new DuplicateActiveLoanException("User already has an active loan for this book.");
         }
 
+        // Expected return date cannot be earlier than today
         if (request.expectedReturnDate().isBefore(LocalDate.now())){
             throw new InvalidReturnDateException("Expected return date cannot be in the past.");
         }
@@ -65,6 +67,7 @@ public class LoanService {
 
         Book book = loan.getBook();
 
+        // Increase available copies when the loan is returned
         book.setAvailableCopies(book.getAvailableCopies() + 1);
 
         return loanRepository.save(loan);

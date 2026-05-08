@@ -2,6 +2,7 @@ package com.agustina.library.service;
 
 
 import com.agustina.library.dto.CreateLoanRequest;
+import com.agustina.library.exception.DuplicateActiveLoanException;
 import com.agustina.library.exception.LoanAlreadyReturnedException;
 import com.agustina.library.exception.NoAvailableCopiesException;
 import com.agustina.library.model.Book;
@@ -133,6 +134,26 @@ class LoanServiceTest {
         verify(loanRepository).findById(1L);
 
         verify(loanRepository, never()).save(any(Loan.class));
+    }
+
+    @Test
+    void shouldThrowWhenUserAlreadyHasActiveLoanForBook(){
+        Book book = new Book(1L, "Prueba", "9780132350884", 2);
+
+        CreateLoanRequest request = new CreateLoanRequest(1L, "Agustina", LocalDate.now().plusDays(14));
+
+        when(bookRepository.findById(1L)).thenReturn(Optional.of(book));
+
+        when(loanRepository.existsByUserNameAndBookIdAndActualReturnDateIsNull("Agustina", 1L)).thenReturn(true);
+
+        assertThrows(DuplicateActiveLoanException.class, () -> loanService.createLoan(request));
+
+        assertEquals(2, book.getAvailableCopies());
+
+        verify(bookRepository).findById(1L);
+
+        verify(loanRepository, never())
+                .save(any(Loan.class));
     }
 
 

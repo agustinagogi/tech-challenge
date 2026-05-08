@@ -5,6 +5,8 @@ import com.agustina.library.model.Book;
 import com.agustina.library.repository.BookRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class BookService {
 
@@ -18,5 +20,9 @@ public class BookService {
         Book book = new Book(null, request.title(), request.isbn(), request.availableCopies());
 
         return bookRepository.save(book);
+    }
+
+    public List<Book> searchBooksByTitle(String title){
+        return bookRepository.findByTitleContainingIgnoreCase(title);
     }
 }

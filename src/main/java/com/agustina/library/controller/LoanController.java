@@ -3,10 +3,7 @@ package com.agustina.library.controller;
 import com.agustina.library.dto.CreateLoanRequest;
 import com.agustina.library.model.Loan;
 import com.agustina.library.service.LoanService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/loans")
@@ -21,5 +18,10 @@ public class LoanController {
     @PostMapping
     public Loan createLoan(@RequestBody CreateLoanRequest request){
         return loanService.createLoan(request);
+    }
+
+    @PutMapping("/{id}/return")
+    public Loan returnLoan(@PathVariable Long id){
+        return loanService.returnLoan(id);
     }
 }

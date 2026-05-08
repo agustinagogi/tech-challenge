@@ -2,6 +2,8 @@ package com.agustina.library.service;
 
 import com.agustina.library.dto.CreateLoanRequest;
 import com.agustina.library.exception.BookNotFoundException;
+import com.agustina.library.exception.InvalidReturnDateException;
+import com.agustina.library.exception.DuplicateActiveLoanException;
 import com.agustina.library.exception.LoanAlreadyReturnedException;
 import com.agustina.library.exception.LoanNotFoundException;
 import com.agustina.library.exception.NoAvailableCopiesException;
@@ -34,6 +36,10 @@ public class LoanService {
 
         if (userAlreadyHasBook){
             throw new DuplicateActiveLoanException("User already has an active loan for this book.");
+        }
+
+        if (request.expectedReturnDate().isBefore(LocalDate.now())){
+            throw new InvalidReturnDateException("Expected return date cannot be in the past.");
         }
 
         // If there's no available copies, we get an error

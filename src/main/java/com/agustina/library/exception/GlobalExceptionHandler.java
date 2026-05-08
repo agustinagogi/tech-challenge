@@ -30,4 +30,14 @@ public class GlobalExceptionHandler {
                 "error", ex.getMessage()
         );
     }
+
+    @ExceptionHandler(LoanNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public Map<String, Object> handleLoanNotFound(LoanNotFoundException ex){
+        return Map.of(
+                "timestamp", LocalDateTime.now(),
+                "status", 404,
+                "error", ex.getMessage()
+        );
+    }
 }

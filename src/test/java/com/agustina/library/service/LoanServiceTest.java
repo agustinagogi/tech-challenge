@@ -83,5 +83,39 @@ class LoanServiceTest {
         verify(loanRepository, never()).save(any(Loan.class));
     }
 
+    @Test
+    void shouldReturnLoan() {
+
+        Book book = new Book(
+                1L,
+                "Clean Code",
+                "9780132350884",
+                2
+        );
+
+        Loan loan = new Loan(
+                1L,
+                "Agustina",
+                LocalDate.now().plusDays(14),
+                null,
+                book
+        );
+
+        when(loanRepository.findById(1L))
+                .thenReturn(Optional.of(loan));
+
+        when(loanRepository.save(any(Loan.class)))
+                .thenReturn(loan);
+
+        Loan result = loanService.returnLoan(1L);
+
+        assertEquals(LocalDate.now(), result.getActualReturnDate());
+
+        assertEquals(3, book.getAvailableCopies());
+
+        verify(loanRepository).findById(1L);
+        verify(loanRepository).save(any(Loan.class));
+    }
+
 
 }

@@ -2,6 +2,7 @@ package com.agustina.library.service;
 
 import com.agustina.library.dto.CreateLoanRequest;
 import com.agustina.library.exception.BookNotFoundException;
+import com.agustina.library.exception.LoanAlreadyReturnedException;
 import com.agustina.library.exception.LoanNotFoundException;
 import com.agustina.library.exception.NoAvailableCopiesException;
 import com.agustina.library.model.Book;
@@ -28,6 +29,7 @@ public class LoanService {
     public Loan createLoan(CreateLoanRequest request){
         Book book = bookRepository.findById(request.bookId()).orElseThrow(() -> new BookNotFoundException("Book not found."));
 
+        // If there's no available copies, we get an error
         if (book.getAvailableCopies() <= 0){
             throw new NoAvailableCopiesException("No copies available for this book.");
         }
@@ -42,6 +44,10 @@ public class LoanService {
     // Method to return a loan
     public Loan returnLoan(Long loanId){
         Loan loan = loanRepository.findById(loanId).orElseThrow(() -> new LoanNotFoundException("Loan not found."));
+
+        if (loan.getActualReturnDate() != null){
+            throw new LoanAlreadyReturnedException("Loan has already been returned");
+        }
 
         loan.setActualReturnDate(LocalDate.now());
 

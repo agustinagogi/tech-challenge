@@ -40,4 +40,14 @@ public class GlobalExceptionHandler {
                 "error", ex.getMessage()
         );
     }
+
+    @ExceptionHandler(LoanAlreadyReturnedException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public Map<String, Object> handleLoanNotFound(LoanAlreadyReturnedException ex){
+        return Map.of(
+                "timestamp", LocalDateTime.now(),
+                "status", 409,
+                "error", ex.getMessage()
+        );
+    }
 }

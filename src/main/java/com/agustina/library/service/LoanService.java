@@ -1,6 +1,8 @@
 package com.agustina.library.service;
 
 import com.agustina.library.dto.CreateLoanRequest;
+import com.agustina.library.exception.BookNotFoundException;
+import com.agustina.library.exception.NoAvailableCopiesException;
 import com.agustina.library.model.Book;
 import com.agustina.library.model.Loan;
 import com.agustina.library.repository.BookRepository;
@@ -23,10 +25,10 @@ public class LoanService {
 
     // Method to create a loan
     public Loan createLoan(CreateLoanRequest request){
-        Book book = bookRepository.findById(request.bookId()).orElseThrow();
+        Book book = bookRepository.findById(request.bookId()).orElseThrow(() -> new BookNotFoundException("Book not found."));
 
         if (book.getAvailableCopies() <= 0){
-            throw new RuntimeException("No copies available for this book.");
+            throw new NoAvailableCopiesException("No copies available for this book.");
         }
 
         book.setAvailableCopies(book.getAvailableCopies() - 1);

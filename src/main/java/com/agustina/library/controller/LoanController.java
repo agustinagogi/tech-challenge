@@ -3,6 +3,7 @@ package com.agustina.library.controller;
 import com.agustina.library.dto.CreateLoanRequest;
 import com.agustina.library.model.Loan;
 import com.agustina.library.service.LoanService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,7 +20,7 @@ public class LoanController {
     }
 
     @PostMapping
-    public Loan createLoan(@RequestBody CreateLoanRequest request){
+    public Loan createLoan(@Valid @RequestBody CreateLoanRequest request){
         return loanService.createLoan(request);
     }
 

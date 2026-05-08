@@ -12,6 +12,7 @@ import com.agustina.library.repository.LoanRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 public class LoanService {
@@ -56,5 +57,9 @@ public class LoanService {
         book.setAvailableCopies(book.getAvailableCopies() + 1);
 
         return loanRepository.save(loan);
+    }
+
+    public List<Loan> getActiveLoans(String userName){
+        return loanRepository.findByUserNameAndActualReturnDateIsNull(userName);
     }
 }

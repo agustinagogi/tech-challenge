@@ -5,6 +5,8 @@ import com.agustina.library.model.Loan;
 import com.agustina.library.service.LoanService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/loans")
 public class LoanController {
@@ -23,5 +25,10 @@ public class LoanController {
     @PutMapping("/{id}/return")
     public Loan returnLoan(@PathVariable Long id){
         return loanService.returnLoan(id);
+    }
+
+    @GetMapping("/active")
+    public List<Loan> getActiveLoans(@RequestParam String userName){
+        return loanService.getActiveLoans(userName);
     }
 }

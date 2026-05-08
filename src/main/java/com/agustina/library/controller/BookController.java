@@ -3,6 +3,7 @@ package com.agustina.library.controller;
 import com.agustina.library.dto.CreateBookRequest;
 import com.agustina.library.model.Book;
 import com.agustina.library.service.BookService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,7 +21,7 @@ public class BookController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Book createBook(@RequestBody CreateBookRequest request){
+    public Book createBook(@Valid @RequestBody CreateBookRequest request){
         return bookService.createBook(request);
     }
 

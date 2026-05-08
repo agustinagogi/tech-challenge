@@ -43,7 +43,17 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(LoanAlreadyReturnedException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
-    public Map<String, Object> handleLoanNotFound(LoanAlreadyReturnedException ex){
+    public Map<String, Object> handleLoanAlreadyReturned(LoanAlreadyReturnedException ex){
+        return Map.of(
+                "timestamp", LocalDateTime.now(),
+                "status", 409,
+                "error", ex.getMessage()
+        );
+    }
+
+    @ExceptionHandler(DuplicateActiveLoanException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public Map<String, Object> handleDuplicateActiveLoan(DuplicateActiveLoanException ex){
         return Map.of(
                 "timestamp", LocalDateTime.now(),
                 "status", 409,

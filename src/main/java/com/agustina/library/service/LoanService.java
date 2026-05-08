@@ -17,18 +17,24 @@ import java.util.List;
 @Service
 public class LoanService {
 
-    public LoanService(LoanRepository loanRepository, BookRepository bookRepository) {
-        this.loanRepository = loanRepository;
-        this.bookRepository = bookRepository;
-    }
     private final LoanRepository loanRepository;
 
     private final BookRepository bookRepository;
 
+    public LoanService(LoanRepository loanRepository, BookRepository bookRepository) {
+        this.loanRepository = loanRepository;
+        this.bookRepository = bookRepository;
+    }
 
     // Method to create a loan
     public Loan createLoan(CreateLoanRequest request){
         Book book = bookRepository.findById(request.bookId()).orElseThrow(() -> new BookNotFoundException("Book not found."));
+
+        boolean userAlreadyHasBook = loanRepository.existsByUserNameAndBookIdAndActualReturnDateIsNull(request.userName(), request.bookId());
+
+        if (userAlreadyHasBook){
+            throw new DuplicateActiveLoanException("User already has an active loan for this book.");
+        }
 
         // If there's no available copies, we get an error
         if (book.getAvailableCopies() <= 0){

@@ -80,4 +80,14 @@ public class GlobalExceptionHandler {
                 "error", ex.getMessage()
         );
     }
+
+    @ExceptionHandler(BookAlreadyExistsException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public Map<String, Object> handleBookAlreadyExists(BookAlreadyExistsException ex){
+        return Map.of(
+                "timestamp", LocalDateTime.now(),
+                "status", 409,
+                "error", ex.getMessage()
+        );
+    }
 }

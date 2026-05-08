@@ -1,6 +1,7 @@
 package com.agustina.library.service;
 
 import com.agustina.library.dto.CreateBookRequest;
+import com.agustina.library.exception.BookAlreadyExistsException;
 import com.agustina.library.model.Book;
 import com.agustina.library.repository.BookRepository;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,10 @@ public class BookService {
     }
 
     public Book createBook(CreateBookRequest request){
+        if (bookRepository.existsByIsbn(request.isbn())){
+            throw new BookAlreadyExistsException("A book with this ISBN already exists.");
+        }
+
         Book book = new Book(null, request.title(), request.isbn(), request.availableCopies());
 
         return bookRepository.save(book);

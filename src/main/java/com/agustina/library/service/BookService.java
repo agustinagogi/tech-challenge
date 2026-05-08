@@ -23,7 +23,6 @@ public class BookService {
         return bookRepository.save(book);
     }
 
-    @GetMapping("/search")
     public List<Book> searchBooksByTitle(String title){
         return bookRepository.findByTitleContainingIgnoreCase(title);
     }

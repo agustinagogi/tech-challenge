@@ -23,6 +23,7 @@ public class BookController {
         return bookService.createBook(request);
     }
 
+    @GetMapping("/search")
     public List<Book> searchBooks(@RequestParam String title){
         return bookService.searchBooksByTitle(title);
     }

@@ -99,7 +99,7 @@ public class GlobalExceptionHandler {
                 .getFieldErrors()
                 .stream()
                 .findFirst()
-                .map(error -> error.getField() + " " + error.getDefaultMessage())
+                .map(error -> error.getDefaultMessage())
                 .orElse("Invalid request");
 
         return Map.of(
